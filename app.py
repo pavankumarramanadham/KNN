@@ -14,6 +14,19 @@ from PIL import Image
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Secure random key should be used in production
 
+# Configuring SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Classes Model
+class Attendance(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    roll = db.Column(db.Integer)
+    time = db.Column(db.DateTime)
+    date = db.Column(db.Date)
+
 nimgs = 10
 
 # Saving Date today in 2 different formats
@@ -29,18 +42,6 @@ if not os.path.isdir('static'):
 if not os.path.isdir('static/faces'):
     os.makedirs('static/faces')
 
-# Configuring SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-# Classes Model
-class Attendance(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    roll = db.Column(db.Integer)
-    time = db.Column(db.DateTime)
-    date = db.Column(db.Date)
 
 # get a number of total registered users
 def totalreg():
@@ -209,3 +210,4 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
