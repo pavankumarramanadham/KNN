@@ -15,9 +15,11 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Secure random key should be used in production
 
 # Configuring SQLAlchemy
+db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db.init_app(app)
+
 
 # Classes Model
 class Attendance(db.Model):
